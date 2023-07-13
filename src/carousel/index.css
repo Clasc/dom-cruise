@@ -1,0 +1,20 @@
+.carousel{
+    cursor: grab;
+    width: 300px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 124px;
+    overflow-x: scroll; 
+    scroll-snap-type:both mandatory;    
+}
+
+ul{
+    list-style: none;
+}
+
+.carousel .carousel-element{
+    scroll-snap-align: start;
+    scroll-snap-stop: normal;
+   
+}
