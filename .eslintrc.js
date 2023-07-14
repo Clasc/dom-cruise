@@ -29,6 +29,7 @@ module.exports = {
   'rules': {
     'react/prop-types': 'off',
     'react/react-in-jsx-scope': 'off',
-    'max-len': 120,
+    'max-len': ['error', { 'code': 120 }],
+    'object-curly-spacing': ['error', 'always'],
   },
 };
