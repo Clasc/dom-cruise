@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import './index.css';
-const Carousel = ({ children, left, right }) => {
+const Carousel = ({ children, left, right, distance=20 }) => {
   const [pos, setPos] = useState({ x: null, y: null, left: null, top: null });
   const carouselRef = useRef(null);
   const [isGrabbing, setIsGrabbing] = useState(false);
@@ -41,8 +41,7 @@ const Carousel = ({ children, left, right }) => {
     carouselRef.current.scrollTop = pos.top - dy;
     carouselRef.current.scrollLeft = pos.left - dx;
   };
-  // TODO: make dynamic: distance between children
-  const distance = 100;
+
   const moveNext = () => {
     carouselRef.current.scrollLeft += distance;
   };
@@ -51,10 +50,10 @@ const Carousel = ({ children, left, right }) => {
     carouselRef.current.scrollLeft -= distance;
   };
 
-  const getContainerStyle = ()=>(isGrabbing ? { cursor: 'grab', scrollSnapType: 'none' }:{});
+  const getContainerStyle = ()=>(isGrabbing ? { cursor: 'grabbing' }:{});
 
   return (
-    <div className='carousel-wrapper'>
+    <div className='carousel-wrapper' style={{ '--distance': `${distance}px` }}>
       <div className='arrow left' onClick={movePrevious}>
         {left}
       </div>
