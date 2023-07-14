@@ -9,7 +9,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <Carousel>
-          {els.map((e)=><h2 key={e}>{e}</h2>)}
+          {els.map((e)=><a href='www.google.com' key={e}>{e}</a>)}
         </Carousel>
       </header>
     </div>

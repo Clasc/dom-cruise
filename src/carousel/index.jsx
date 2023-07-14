@@ -4,9 +4,16 @@ const Carousel = ({ children }) => {
   const [pos, setPos] = useState({ x: null, y: null, left: null, top: null });
   const carouselRef = useRef(null);
   const [isGrabbing, setIsGrabbing] = useState(false);
-  const mouseUpHandler = () => setIsGrabbing(false);
+  const mouseUpHandler = function() {
+    setIsGrabbing(false), document.removeEventListener('mouseup', mouseUpHandler);
+  };
 
+  /**
+   *
+   * @param {Event} e
+   */
   const mouseDownHandler = (e) => {
+    e.preventDefault();
     setPos({
       // The current scroll
       left: carouselRef.current.scrollLeft,
@@ -16,10 +23,16 @@ const Carousel = ({ children }) => {
       y: e.clientY,
     });
     setIsGrabbing(true);
+    document.addEventListener('mouseup', mouseUpHandler);
   };
 
+  /**
+   *
+   * @param {Event} e
+   */
   const mouseMoveHandler = function(e) {
     if (!isGrabbing) return;
+    e.preventDefault();
     // How far the mouse has been moved
     const dx = e.clientX - pos.x;
     const dy = e.clientY - pos.y;
