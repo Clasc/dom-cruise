@@ -1,8 +1,8 @@
 .carousel {
     cursor: grab;
-    width: 300px;
     display: flex;
     flex-direction: row;
+    min-width: var(--distance);
     justify-content: space-between;
     gap: var(--distance, 100px);
     overflow-x: scroll;
