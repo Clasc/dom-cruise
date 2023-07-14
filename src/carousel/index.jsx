@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react';
 import './index.css';
-const classNames = (...classes)=>classes.join(' ');
+const classNames = (...classes) => classes.join(' ');
 
-const Carousel = ({ children, left, right, distance=20, noScrollBar=false }) => {
+const Carousel = ({ children, left, right, distance = 20, noScrollBar = false, scrollDistance = 2 }) => {
   const [pos, setPos] = useState({ x: null, y: null, left: null, top: null });
   const carouselRef = useRef(null);
   const [isGrabbing, setIsGrabbing] = useState(false);
@@ -45,14 +45,14 @@ const Carousel = ({ children, left, right, distance=20, noScrollBar=false }) => 
   };
 
   const moveNext = () => {
-    carouselRef.current.scrollLeft += distance;
+    carouselRef.current.scrollLeft += distance * scrollDistance;
   };
 
-  const movePrevious = ()=>{
-    carouselRef.current.scrollLeft -= distance;
+  const movePrevious = () => {
+    carouselRef.current.scrollLeft -= distance * scrollDistance;
   };
 
-  const getContainerStyle = ()=>(isGrabbing ? { cursor: 'grabbing' }:{});
+  const getContainerStyle = () => (isGrabbing ? { cursor: 'grabbing' } : {});
 
   return (
     <div className='carousel-wrapper' style={{ '--distance': `${distance}px` }}>
@@ -60,7 +60,7 @@ const Carousel = ({ children, left, right, distance=20, noScrollBar=false }) => 
         {left}
       </div>
       <ul
-        className={classNames('carousel', (noScrollBar ? 'hide-scrollbar': ''))}
+        className={classNames('carousel', (noScrollBar ? 'hide-scrollbar' : ''))}
         ref={carouselRef}
         onMouseDown={mouseDownHandler}
         onMouseUp={mouseUpHandler}
