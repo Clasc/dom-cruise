@@ -1,6 +1,8 @@
 import { useRef, useState } from 'react';
 import './index.css';
-const Carousel = ({ children, left, right, distance=20 }) => {
+const classNames = (...classes)=>classes.join(' ');
+
+const Carousel = ({ children, left, right, distance=20, noScrollBar=false }) => {
   const [pos, setPos] = useState({ x: null, y: null, left: null, top: null });
   const carouselRef = useRef(null);
   const [isGrabbing, setIsGrabbing] = useState(false);
@@ -58,7 +60,7 @@ const Carousel = ({ children, left, right, distance=20 }) => {
         {left}
       </div>
       <ul
-        className="carousel"
+        className={classNames('carousel', (noScrollBar ? 'hide-scrollbar': ''))}
         ref={carouselRef}
         onMouseDown={mouseDownHandler}
         onMouseUp={mouseUpHandler}
