@@ -1,7 +1,7 @@
-import {useRef, useState} from 'react';
+import { useRef, useState } from 'react';
 import './index.css';
-const Carousel = ({children}) => {
-  const [pos, setPos] = useState({x: null, y: null, left: null, top: null});
+const Carousel = ({ children }) => {
+  const [pos, setPos] = useState({ x: null, y: null, left: null, top: null });
   const carouselRef = useRef(null);
   const [isGrabbing, setIsGrabbing] = useState(false);
   const mouseUpHandler = () => setIsGrabbing(false);
@@ -29,6 +29,8 @@ const Carousel = ({children}) => {
     carouselRef.current.scrollLeft = pos.left - dx;
   };
 
+  const getContainerStyle = ()=>(isGrabbing ? { cursor: 'grab', scrollSnapType: 'none', scrollBehavior: 'smooth' }:{});
+
   return (
     <div>
       <ul
@@ -36,8 +38,8 @@ const Carousel = ({children}) => {
         ref={carouselRef}
         onMouseMove={mouseMoveHandler}
         className="carousel"
-        style={{cursor: isGrabbing && 'grab', scrollSnapType: isGrabbing && 'none'}}>
-        {children.map((c) => <li className="carousel-element">{c}</li>)}
+        style={getContainerStyle()}>
+        {children.map((c, i) => <li key={i} className="carousel-element">{c}</li>)}
       </ul>
     </div>
   );
