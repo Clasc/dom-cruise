@@ -7,6 +7,7 @@
     gap: 124px;
     overflow-x: scroll;
     scroll-snap-type: both mandatory;
+    scroll-behavior: smooth;
 }
 
 ul {
@@ -18,3 +19,11 @@ ul {
     scroll-snap-stop: normal;
 
 }
+
+.carousel-wrapper {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.carousel-wrapper .arrow {}

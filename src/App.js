@@ -8,7 +8,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Carousel>
+        <Carousel left={<button>Left</button>} right={<button>Right</button>}>
           {els.map((e)=><a href='www.google.com' key={e}>{e}</a>)}
         </Carousel>
       </header>
