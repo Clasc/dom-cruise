@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, Ref, useRef, useState } from 'react';
+import React, { MouseEventHandler, useRef, useState } from 'react';
 import './index.css';
 const classNames = (...classes: string[]) => classes.join(' ');
 
@@ -8,7 +8,6 @@ type CarouselProps = {
   distance?: number,
   noScrollBar?: boolean,
   scrollDistance?: number,
-  slidesToShow?: number
 };
 const Carousel = ({
   children,
@@ -17,7 +16,6 @@ const Carousel = ({
   distance = 20,
   noScrollBar = false,
   scrollDistance = 2,
-  slidesToShow = 1,
 }: CarouselProps) => {
   const [pos, setPos] = useState<{ x: number, y: number, left: number, top: number }>({ x: 0, y: 0, left: 0, top: 0 });
   const carouselRef = useRef<HTMLUListElement>(null);
