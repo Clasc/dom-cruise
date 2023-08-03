@@ -1,14 +1,35 @@
-import React, { MouseEventHandler, useRef, useState } from 'react';
+import React, { MouseEventHandler, StyleHTMLAttributes, useMemo, useRef, useState } from 'react';
 import './index.css';
 const classNames = (...classes: string[]) => classes.join(' ');
+
+
+type StyleProp = { [key: string]: string | number };
+type StyleVariable<TVar extends string> = `--${TVar}`;
+
+// makeCssVariables takes an object and returns the same object but with the keys prefixed with '--'
+const makeCssVariables = <TVars extends StyleProp>(style: TVars) => {
+  const result: StyleProp = {};
+  for (const key in style) {
+    if (Object.prototype.hasOwnProperty(key)) {
+      result[`--${key}`] = style[key];
+    }
+  }
+
+  return result as Record<StyleVariable<Exclude<keyof TVars, symbol|number>>, TVars[string]>;
+};
+
+type Pixel<TVal extends number | string> = `${TVal}px`;
+const pixel: <TVal extends string | number>(val: TVal) => Pixel<TVal> = (val) => `${val}px`;
 
 type CarouselProps = {
   children: React.ReactNode[],
   left: number, right: number,
   distance?: number,
   noScrollBar?: boolean,
+  slidesPerPage?: number,
   scrollDistance?: number,
 };
+
 const Carousel = ({
   children,
   left,
@@ -16,6 +37,7 @@ const Carousel = ({
   distance = 20,
   noScrollBar = false,
   scrollDistance = 2,
+  slidesPerPage = 1,
 }: CarouselProps) => {
   const [pos, setPos] = useState<{ x: number, y: number, left: number, top: number }>({ x: 0, y: 0, left: 0, top: 0 });
   const carouselRef = useRef<HTMLUListElement>(null);
@@ -62,9 +84,16 @@ const Carousel = ({
   };
 
   const getContainerStyle = () => (isGrabbing ? { cursor: 'grabbing' } : {});
+  const carouselWidth = useMemo(() => {
+    if (!carouselRef.current) return { slideWith: 0 };
+    return { slideWith: pixel(carouselRef.current.clientWidth / slidesPerPage) };
+  }
+  , [slidesPerPage]);
 
   return (
-    <div className='carousel-wrapper' style={{ '--distance': `${distance}px`, '--slideWidth': `${distance}px` } as any}>
+    <div className='carousel-wrapper' style={makeCssVariables(
+        { distance: pixel(distance), slideWidth: pixel(distance), ...carouselWidth },
+    ) as StyleHTMLAttributes<StyleProp>}>
       <div className='arrow left' onClick={movePrevious}>
         {left}
       </div>
@@ -75,7 +104,7 @@ const Carousel = ({
         onMouseUp={mouseUpHandler}
         onMouseMove={mouseMoveHandler}
         style={getContainerStyle()}>
-        {children.map((c, i) => <li key={i} className="carousel-element">{c}</li>)}
+        {children}
       </ul>
       <div className='arrow right' onClick={moveNext}>{right}</div>
     </div>
