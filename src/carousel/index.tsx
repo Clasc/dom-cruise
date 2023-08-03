@@ -93,7 +93,7 @@ const Carousel = ({
   return (
     <div className='carousel-wrapper' style={makeCssVariables(
         { distance: pixel(distance), slideWidth: pixel(distance), ...carouselWidth },
-    ) as StyleHTMLAttributes<StyleProp>}>
+    ) as React.CSSProperties}>
       <div className='arrow left' onClick={movePrevious}>
         {left}
       </div>
