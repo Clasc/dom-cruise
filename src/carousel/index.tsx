@@ -1,10 +1,9 @@
-import React, { MouseEventHandler, StyleHTMLAttributes, useMemo, useRef, useState } from 'react';
+import React, { MouseEventHandler, useMemo, useRef, useState } from 'react';
 import './index.css';
 const classNames = (...classes: string[]) => classes.join(' ');
 
 
 type StyleProp = { [key: string]: string | number };
-type StyleVariable<TVar extends string> = `--${TVar}`;
 
 // makeCssVariables takes an object and returns the same object but with the keys prefixed with '--'
 const makeCssVariables = <TVars extends StyleProp>(style: TVars) => {
@@ -15,7 +14,7 @@ const makeCssVariables = <TVars extends StyleProp>(style: TVars) => {
     }
   }
 
-  return result as Record<StyleVariable<Exclude<keyof TVars, symbol|number>>, TVars[string]>;
+  return result as {[Property in keyof TVars as `--${string & Property}`]: TVars[Property]};
 };
 
 type Pixel<TVal extends number | string> = `${TVal}px`;
@@ -87,8 +86,7 @@ const Carousel = ({
   const carouselWidth = useMemo(() => {
     if (!carouselRef.current) return { slideWith: 0 };
     return { slideWith: pixel(carouselRef.current.clientWidth / slidesPerPage) };
-  }
-  , [slidesPerPage]);
+  }, [slidesPerPage]);
 
   return (
     <div className='carousel-wrapper' style={makeCssVariables(
