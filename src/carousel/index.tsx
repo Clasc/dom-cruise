@@ -1,25 +1,37 @@
-import { useRef, useState } from 'react';
+import React, { MouseEventHandler, Ref, useRef, useState } from 'react';
 import './index.css';
-const classNames = (...classes) => classes.join(' ');
+const classNames = (...classes: string[]) => classes.join(' ');
 
-const Carousel = ({ children, left, right, distance = 20, noScrollBar = false, scrollDistance = 2 }) => {
-  const [pos, setPos] = useState({ x: null, y: null, left: null, top: null });
-  const carouselRef = useRef(null);
+type CarouselProps = {
+  children: React.ReactNode[],
+  left: number, right: number,
+  distance?: number,
+  noScrollBar?: boolean,
+  scrollDistance?: number,
+  slidesToShow?: number
+};
+const Carousel = ({
+  children,
+  left,
+  right,
+  distance = 20,
+  noScrollBar = false,
+  scrollDistance = 2,
+  slidesToShow = 1,
+}: CarouselProps) => {
+  const [pos, setPos] = useState<{ x: number, y: number, left: number, top: number }>({ x: 0, y: 0, left: 0, top: 0 });
+  const carouselRef = useRef<HTMLUListElement>(null);
   const [isGrabbing, setIsGrabbing] = useState(false);
   const mouseUpHandler = function() {
     setIsGrabbing(false), document.removeEventListener('mouseup', mouseUpHandler);
   };
 
-  /**
-   *
-   * @param {Event} e
-   */
-  const mouseDownHandler = (e) => {
+  const mouseDownHandler: MouseEventHandler<HTMLUListElement> = (e) => {
     e.preventDefault();
     setPos({
       // The current scroll
-      left: carouselRef.current.scrollLeft,
-      top: carouselRef.current.scrollTop,
+      left: carouselRef.current?.scrollLeft ?? 0,
+      top: carouselRef.current?.scrollTop ?? 0,
       // Get the current mouse position
       x: e.clientX,
       y: e.clientY,
@@ -28,12 +40,9 @@ const Carousel = ({ children, left, right, distance = 20, noScrollBar = false, s
     document.addEventListener('mouseup', mouseUpHandler);
   };
 
-  /**
-   *
-   * @param {Event} e
-   */
-  const mouseMoveHandler = function(e) {
-    if (!isGrabbing) return;
+
+  const mouseMoveHandler: MouseEventHandler<HTMLUListElement> = (e) => {
+    if (!isGrabbing || !carouselRef.current) return;
     e.preventDefault();
     // How far the mouse has been moved
     const dx = e.clientX - pos.x;
@@ -45,17 +54,19 @@ const Carousel = ({ children, left, right, distance = 20, noScrollBar = false, s
   };
 
   const moveNext = () => {
+    if (!carouselRef.current) return;
     carouselRef.current.scrollLeft += distance * scrollDistance;
   };
 
   const movePrevious = () => {
+    if (!carouselRef.current) return;
     carouselRef.current.scrollLeft -= distance * scrollDistance;
   };
 
   const getContainerStyle = () => (isGrabbing ? { cursor: 'grabbing' } : {});
 
   return (
-    <div className='carousel-wrapper' style={{ '--distance': `${distance}px` }}>
+    <div className='carousel-wrapper' style={{ '--distance': `${distance}px`, '--slideWidth': `${distance}px` } as any}>
       <div className='arrow left' onClick={movePrevious}>
         {left}
       </div>

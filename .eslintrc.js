@@ -5,7 +5,9 @@ module.exports = {
   'extends': [
     'google',
     'plugin:react/recommended',
+    'plugin:@typescript-eslint/recommended',
   ],
+  'parser': '@typescript-eslint/parser',
   'overrides': [
     {
       'env': {
@@ -25,6 +27,7 @@ module.exports = {
   },
   'plugins': [
     'react',
+    '@typescript-eslint',
   ],
   'rules': {
     'react/prop-types': 'off',
