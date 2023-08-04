@@ -1,6 +1,6 @@
 # Mini React carousel
 This is a carousel based on react only.
-No other peer dependendy.
+No other dependendy.
 
 ## Planned features
 - different carousel element width
