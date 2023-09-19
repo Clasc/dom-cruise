@@ -20,17 +20,20 @@ const pixel: <TVal extends string | number>(val: TVal) => Pixel<TVal> = (val) =>
 
 type CarouselProps = {
   children: React.ReactNode[],
-  left: number, right: number,
+  labels?:{left:string, right:string},
   distance?: number,
   noScrollBar?: boolean,
   slidesPerPage?: number,
   scrollDistance?: number,
+  classNameLeftArrow?:string,
+  classNameRightArrow?:string
 };
 
 const Carousel = ({
   children,
-  left,
-  right,
+  labels=defaultLables,
+  classNameLeftArrow='',
+  classNameRightArrow='',
   distance = 20,
   noScrollBar = false,
   scrollDistance = 2,
@@ -101,10 +104,13 @@ const Carousel = ({
     <div className='carousel-wrapper' style={makeCssVariables(
         { distance: pixel(distance), slideWidth: pixel(distance), ...carouselWidth },
     ) as React.CSSProperties}>
-      <div className='arrow left' onClick={movePrevious}>
-        {left}
-      </div>
+
+      <button className={classNames('arrow left', classNameLeftArrow)} onClick={movePrevious} tabIndex={1}>
+        {labels.left}
+      </button>
+
       <ul
+        tabIndex={3}
         className={classNames('carousel', (noScrollBar ? 'hide-scrollbar' : ''))}
         ref={carouselRef}
         onMouseDown={mouseDownHandler}
@@ -113,9 +119,14 @@ const Carousel = ({
         style={getContainerStyle()}>
         {children}
       </ul>
-      <div className='arrow right' onClick={moveNext}>{right}</div>
+      <button className={classNames('arrow right', classNameRightArrow )} onClick={moveNext} tabIndex={2}>
+        {labels.right}
+      </button>
     </div>
   );
 };
+
+
+const defaultLables = { left: 'Left', right: 'Right' };
 
 export default Carousel;

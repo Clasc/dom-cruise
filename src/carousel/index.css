@@ -24,6 +24,27 @@ ul {
 
 }
 
+.arrow {
+    display: flex;
+    align-self: center;
+    align-items: center;
+    background-color: white;
+    color: black;
+    border: none;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+    border-radius: 100px;
+    box-shadow: 4px 4px 15px darkgrey;
+    padding: 8px;
+}
+
+.arrow.left ::before {
+    content: "";
+}
+
+.arrow.right {}
+
 .carousel-wrapper {
     display: flex;
     justify-content: space-between;

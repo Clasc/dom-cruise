@@ -9,7 +9,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <div className='container'>
-          <Carousel left={<button>Left</button>} right={<button>Right</button>} distance={124} noScrollBar >
+          <Carousel distance={124} noScrollBar >
             {els.map((e)=> <a href="www.google.com" key={e}>
               <img src='https://picsum.photos/200'/>
             </a>)}
