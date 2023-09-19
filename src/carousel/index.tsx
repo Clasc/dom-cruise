@@ -43,15 +43,21 @@ const Carousel = ({
     setIsGrabbing(false), document.removeEventListener('mouseup', mouseUpHandler);
   };
 
+  const currentScroll = ()=>({
+    left: carouselRef.current?.scrollLeft ?? 0,
+    top: carouselRef.current?.scrollTop ?? 0,
+  });
+
+  const mousePos=(e:{clientX:number, clientY:number})=>({
+    x: e.clientX,
+    y: e.clientY,
+  });
+
   const mouseDownHandler: MouseEventHandler<HTMLUListElement> = (e) => {
     e.preventDefault();
     setPos({
-      // The current scroll
-      left: carouselRef.current?.scrollLeft ?? 0,
-      top: carouselRef.current?.scrollTop ?? 0,
-      // Get the current mouse position
-      x: e.clientX,
-      y: e.clientY,
+      ...currentScroll(),
+      ...mousePos(e),
     });
     setIsGrabbing(true);
     document.addEventListener('mouseup', mouseUpHandler);
