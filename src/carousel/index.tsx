@@ -1,22 +1,9 @@
-import React, { MouseEventHandler, useMemo, useRef, useState } from 'react';
+import React, { MouseEventHandler, useEffect, useMemo, useRef, useState } from 'react';
 import './index.css';
+import { pixel } from '../utils/styler/pixel';
+import { cssVar } from '../utils/styler/cssVar';
+import { classNames } from '../utils/styler/classNames';
 
-const classNames = (...classes: string[]) => classes.join(' ');
-type StyleProp = { [key: string]: string | number };
-
-const makeCssVariables = <TVars extends StyleProp>(style: TVars) => {
-  const result: StyleProp = {};
-  for (const key in style) {
-    if (Object.prototype.hasOwnProperty(key)) {
-      result[`--${key}`] = style[key];
-    }
-  }
-
-  return result as {[Property in keyof TVars as `--${string & Property}`]: TVars[Property]};
-};
-
-type Pixel<TVal extends number | string> = `${TVal}px`;
-const pixel: <TVal extends string | number>(val: TVal) => Pixel<TVal> = (val) => `${val}px`;
 
 type CarouselProps = {
   children: React.ReactNode[],
@@ -94,14 +81,22 @@ const Carousel = ({
     carouselRef.current.scrollLeft -= distance * scrollDistance;
   };
 
-  const getContainerStyle = () => (isGrabbing ? { cursor: 'grabbing' } : {});
+  const [containerStyle, setContainerStyle] = useState({});
+  useEffect(()=>{
+    const cursor = isGrabbing ? { cursor: 'grabbing' }:{};
+    const snapping = isGrabbing? cssVar({ 'scroll-snap': 'none', 'scroll-behaviour': 'none' }):{};
+    const res = { ...cursor, ...snapping };
+    setContainerStyle(res );
+  }, [isGrabbing]);
+
+
   const carouselWidth = useMemo(() => {
     if (!carouselRef.current) return { slideWith: 0 };
     return { slideWith: pixel(carouselRef.current.clientWidth / slidesPerPage) };
   }, [slidesPerPage]);
 
   return (
-    <div className='carousel-wrapper' style={makeCssVariables(
+    <div className='carousel-wrapper' style={cssVar(
         { distance: pixel(distance), slideWidth: pixel(distance), ...carouselWidth },
     ) as React.CSSProperties}>
 
@@ -116,7 +111,7 @@ const Carousel = ({
         onMouseDown={mouseDownHandler}
         onMouseUp={mouseUpHandler}
         onMouseMove={mouseMoveHandler}
-        style={getContainerStyle()}>
+        style={containerStyle}>
         {children}
       </ul>
       <button className={classNames('arrow right', classNameRightArrow )} onClick={moveNext} tabIndex={2}>

@@ -6,8 +6,8 @@
     justify-content: space-between;
     gap: var(--distance, 100px);
     overflow-x: scroll;
-    scroll-snap-type: both mandatory;
-    scroll-behavior: smooth;
+    scroll-snap-type: var(--scroll-snap, both mandatory);
+    scroll-behavior: var(--scroll-behaviour, smooth);
 }
 
 .hide-scrollbar {
@@ -18,10 +18,10 @@ ul {
     list-style: none;
 }
 
-.carousel .carousel-element {
-    scroll-snap-align: start;
-    scroll-snap-stop: normal;
 
+.carousel .carousel-element {
+    scroll-snap-align: var(--scroll-behaviour, start);
+    scroll-snap-stop: var(--scroll-behaviour, normal);
 }
 
 .arrow {
