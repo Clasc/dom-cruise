@@ -9,7 +9,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <div className='container'>
-          <Carousel distance={200} noScrollBar >
+          <Carousel distance={50} noScrollBar >
             <div style={{ minWidth: 400, display: 'block',
               height: 300, background: 'orange' }}>Test element</div>
             {els.map((e)=> <a href="www.google.com" key={e}>

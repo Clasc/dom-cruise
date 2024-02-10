@@ -1,16 +1,17 @@
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 
-export const useCarousel=(distance:number, scrollDistance:number)=>{
+export const useCarousel=()=>{
   const carouselRef = useRef<HTMLUListElement>(null);
+  const scrollWidth = useMemo(()=>{
+    if (!carouselRef.current) return 0;
+    return carouselRef.current.clientWidth;
+  }, [carouselRef.current]);
 
-  const getCenter = ()=>{
-    if (!carouselRef.current) return null;
-    carouselRef.current;
-  };
   const currentScroll = ()=>({
     left: carouselRef.current?.scrollLeft ?? 0,
     top: carouselRef.current?.scrollTop ?? 0,
   });
+
   const scrollBy=({ x, y }:{ x: number, y: number }, pos:{top:number, left:number})=>{
     if (!carouselRef.current) return;
     carouselRef.current.scrollTop = pos.top - y;
@@ -19,12 +20,13 @@ export const useCarousel=(distance:number, scrollDistance:number)=>{
 
   const moveNext = () => {
     if (!carouselRef.current) return;
-    carouselRef.current.scrollLeft += distance * scrollDistance;
+    carouselRef.current.scrollLeft += scrollWidth;
   };
 
   const movePrevious = () => {
     if (!carouselRef.current) return;
-    carouselRef.current.scrollLeft -= distance * scrollDistance;
+
+    carouselRef.current.scrollLeft -= scrollWidth;
   };
-  return { currentScroll, getCenter, scrollBy, carouselRef, moveNext, movePrevious };
+  return { currentScroll, scrollBy, carouselRef, moveNext, movePrevious };
 };

@@ -24,29 +24,30 @@ const Carousel = ({
   classNameRightArrow='',
   distance = 20,
   noScrollBar = false,
-  scrollDistance = 2,
   slidesPerPage = 1,
 }: CarouselProps) => {
   const [pos, setPos] = useState<{ x: number, y: number, left: number, top: number }>({ x: 0, y: 0, left: 0, top: 0 });
 
   const [isGrabbing, setIsGrabbing] = useState(false);
-  const mouseUpHandler = function() {
-    setIsGrabbing(false), document.removeEventListener('mouseup', mouseUpHandler);
+
+  const mouseUpHandler:MouseEventHandler<HTMLUListElement> = (e) => {
+    e.preventDefault();
+    setIsGrabbing(false);
+    document.removeEventListener('mouseup', mouseUpHandler as any);
   };
 
   console.log({ children: children[1] });
-
 
   const mousePos=(e:{clientX:number, clientY:number})=>({
     x: e.clientX,
     y: e.clientY,
   });
 
-  const { currentScroll,
-    getCenter,
+  const {
+    currentScroll,
     scrollBy,
     carouselRef, moveNext,
-    movePrevious }=useCarousel(distance, scrollDistance);
+    movePrevious }=useCarousel();
 
   const mouseDownHandler: MouseEventHandler<HTMLUListElement> = (e) => {
     e.preventDefault();
@@ -55,7 +56,7 @@ const Carousel = ({
       ...mousePos(e),
     });
     setIsGrabbing(true);
-    document.addEventListener('mouseup', mouseUpHandler);
+    document.addEventListener('mouseup', mouseUpHandler as any);
   };
 
 
