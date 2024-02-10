@@ -1,8 +1,9 @@
-import React, { MouseEventHandler, useEffect, useMemo, useRef, useState } from 'react';
+import React, { MouseEventHandler, useEffect, useMemo, useState } from 'react';
 import './index.css';
-import { pixel } from '../utils/styler/pixel';
-import { cssVar } from '../utils/styler/cssVar';
-import { classNames } from '../utils/styler/classNames';
+import { pixel } from '../../utils/styler/pixel';
+import { cssVar } from '../../utils/styler/cssVar';
+import { classNames } from '../../utils/styler/classNames';
+import { useCarousel } from '../../hooks/useCarousel';
 
 
 type CarouselProps = {
@@ -27,21 +28,25 @@ const Carousel = ({
   slidesPerPage = 1,
 }: CarouselProps) => {
   const [pos, setPos] = useState<{ x: number, y: number, left: number, top: number }>({ x: 0, y: 0, left: 0, top: 0 });
-  const carouselRef = useRef<HTMLUListElement>(null);
+
   const [isGrabbing, setIsGrabbing] = useState(false);
   const mouseUpHandler = function() {
     setIsGrabbing(false), document.removeEventListener('mouseup', mouseUpHandler);
   };
 
-  const currentScroll = ()=>({
-    left: carouselRef.current?.scrollLeft ?? 0,
-    top: carouselRef.current?.scrollTop ?? 0,
-  });
+  console.log({ children: children[1] });
+
 
   const mousePos=(e:{clientX:number, clientY:number})=>({
     x: e.clientX,
     y: e.clientY,
   });
+
+  const { currentScroll,
+    getCenter,
+    scrollBy,
+    carouselRef, moveNext,
+    movePrevious }=useCarousel(distance, scrollDistance);
 
   const mouseDownHandler: MouseEventHandler<HTMLUListElement> = (e) => {
     e.preventDefault();
@@ -53,11 +58,6 @@ const Carousel = ({
     document.addEventListener('mouseup', mouseUpHandler);
   };
 
-  const scrollBy=({ x, y }:{ x: number, y: number })=>{
-    if (!carouselRef.current) return;
-    carouselRef.current.scrollTop = pos.top - y;
-    carouselRef.current.scrollLeft = pos.left - x;
-  };
 
   const mouseMoveHandler: MouseEventHandler<HTMLUListElement> = (e) => {
     if (!isGrabbing) return;
@@ -68,18 +68,9 @@ const Carousel = ({
       y: e.clientY - pos.y,
     };
 
-    scrollBy(mouseMoveDistance);
+    scrollBy(mouseMoveDistance, pos);
   };
 
-  const moveNext = () => {
-    if (!carouselRef.current) return;
-    carouselRef.current.scrollLeft += distance * scrollDistance;
-  };
-
-  const movePrevious = () => {
-    if (!carouselRef.current) return;
-    carouselRef.current.scrollLeft -= distance * scrollDistance;
-  };
 
   const [containerStyle, setContainerStyle] = useState({});
   useEffect(()=>{

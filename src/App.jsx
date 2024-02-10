@@ -1,5 +1,5 @@
 import './App.css';
-import Carousel from './carousel';
+import Carousel from './components/carousel';
 
 // eslint-disable-next-line require-jsdoc
 function App() {
