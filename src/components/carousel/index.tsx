@@ -36,8 +36,6 @@ const Carousel = ({
     document.removeEventListener('mouseup', mouseUpHandler as any);
   };
 
-  console.log({ children: children[1] });
-
   const mousePos=(e:{clientX:number, clientY:number})=>({
     x: e.clientX,
     y: e.clientY,
@@ -47,7 +45,7 @@ const Carousel = ({
     currentScroll,
     scrollBy,
     carouselRef, moveNext,
-    movePrevious }=useCarousel();
+    movePrevious, setScrollPos }=useCarousel();
 
   const mouseDownHandler: MouseEventHandler<HTMLUListElement> = (e) => {
     e.preventDefault();
@@ -87,6 +85,7 @@ const Carousel = ({
     return { slideWith: pixel(carouselRef.current.clientWidth / slidesPerPage) };
   }, [slidesPerPage]);
 
+
   return (
     <div className='carousel-wrapper' style={cssVar(
         { distance: pixel(distance), slideWidth: pixel(distance), ...carouselWidth },
@@ -103,6 +102,7 @@ const Carousel = ({
         onMouseDown={mouseDownHandler}
         onMouseUp={mouseUpHandler}
         onMouseMove={mouseMoveHandler}
+        onScroll={(e)=> setScrollPos(e.currentTarget.scrollLeft)}
         style={containerStyle}>
         {children}
       </ul>
