@@ -8,20 +8,20 @@ import { useCarousel } from '../../hooks/useCarousel';
 
 type CarouselProps = {
   children: React.ReactNode[],
-  labels?:{left:string, right:string},
+  labels?: { left: string, right: string },
   distance?: number,
   noScrollBar?: boolean,
   slidesPerPage?: number,
   scrollDistance?: number,
-  classNameLeftArrow?:string,
-  classNameRightArrow?:string
+  classNameLeftArrow?: string,
+  classNameRightArrow?: string
 };
 
 const Carousel = ({
   children,
-  labels=defaultLables,
-  classNameLeftArrow='',
-  classNameRightArrow='',
+  labels = defaultLables,
+  classNameLeftArrow = '',
+  classNameRightArrow = '',
   distance = 20,
   noScrollBar = false,
 }: CarouselProps) => {
@@ -29,13 +29,13 @@ const Carousel = ({
 
   const [isGrabbing, setIsGrabbing] = useState(false);
 
-  const mouseUpHandler:MouseEventHandler<HTMLUListElement> = (e) => {
+  const mouseUpHandler: MouseEventHandler<HTMLUListElement> = (e) => {
     e.preventDefault();
     setIsGrabbing(false);
-    document.removeEventListener('mouseup', mouseUpHandler as any );
+    document.removeEventListener('mouseup', mouseUpHandler as any);
   };
 
-  const mousePos=(e:{clientX:number, clientY:number})=>({
+  const mousePos = (e: { clientX: number, clientY: number }) => ({
     x: e.clientX,
     y: e.clientY,
   });
@@ -44,7 +44,7 @@ const Carousel = ({
     currentScroll,
     scrollBy,
     carouselRef, moveNext,
-    movePrevious, setScrollPos }=useCarousel();
+    movePrevious, setScrollPos } = useCarousel();
 
   const mouseDownHandler: MouseEventHandler<HTMLUListElement> = (e) => {
     e.preventDefault();
@@ -71,16 +71,16 @@ const Carousel = ({
 
 
   const [containerStyle, setContainerStyle] = useState({});
-  useEffect(()=>{
-    const cursor = isGrabbing ? { cursor: 'grabbing' }:{};
-    const snapping = isGrabbing? cssVar({ 'scroll-snap': 'none', 'scroll-behaviour': 'none' }):{};
+  useEffect(() => {
+    const cursor = isGrabbing ? { cursor: 'grabbing' } : {};
+    const snapping = isGrabbing ? cssVar({ 'scroll-behaviour': 'none' }) : {};
     const res = { ...cursor, ...snapping };
     setContainerStyle(res);
   }, [isGrabbing]);
 
   return (
     <div className='carousel-wrapper' style={cssVar(
-        { distance: pixel(distance), slideWidth: pixel(distance) },
+      { distance: pixel(distance), slideWidth: pixel(distance) },
     ) as React.CSSProperties}>
 
       <button className={classNames('arrow left', classNameLeftArrow)} onClick={movePrevious} tabIndex={1}>
@@ -94,11 +94,11 @@ const Carousel = ({
         onMouseDown={mouseDownHandler}
         onMouseUp={mouseUpHandler}
         onMouseMove={mouseMoveHandler}
-        onScroll={(e)=> setScrollPos(e.currentTarget.scrollLeft)}
+        onScroll={(e) => setScrollPos(e.currentTarget.scrollLeft)}
         style={containerStyle}>
         {children}
       </ul>
-      <button className={classNames('arrow right', classNameRightArrow )} onClick={moveNext} tabIndex={2}>
+      <button className={classNames('arrow right', classNameRightArrow)} onClick={moveNext} tabIndex={2}>
         {labels.right}
       </button>
     </div>
