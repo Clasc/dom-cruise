@@ -3,10 +3,10 @@ module.exports = {
     'es2021': true,
   },
   'extends': [
-    'prettier',
     'google',
     'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended',
+    "prettier"
   ],
   'parser': '@typescript-eslint/parser',
   'overrides': [
@@ -33,7 +33,5 @@ module.exports = {
   'rules': {
     'react/prop-types': 'off',
     'react/react-in-jsx-scope': 'off',
-    'max-len': ['error', { 'code': 120 }],
-    'object-curly-spacing': ['error', 'always'],
   },
 };
