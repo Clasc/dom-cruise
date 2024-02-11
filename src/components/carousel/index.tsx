@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, useEffect, useMemo, useState } from 'react';
+import React, { MouseEventHandler, useEffect, useState } from 'react';
 import './index.css';
 import { pixel } from '../../utils/styler/pixel';
 import { cssVar } from '../../utils/styler/cssVar';
@@ -24,7 +24,6 @@ const Carousel = ({
   classNameRightArrow='',
   distance = 20,
   noScrollBar = false,
-  slidesPerPage = 1,
 }: CarouselProps) => {
   const [pos, setPos] = useState<{ x: number, y: number, left: number, top: number }>({ x: 0, y: 0, left: 0, top: 0 });
 
@@ -33,7 +32,7 @@ const Carousel = ({
   const mouseUpHandler:MouseEventHandler<HTMLUListElement> = (e) => {
     e.preventDefault();
     setIsGrabbing(false);
-    document.removeEventListener('mouseup', mouseUpHandler as any);
+    document.removeEventListener('mouseup', mouseUpHandler as any );
   };
 
   const mousePos=(e:{clientX:number, clientY:number})=>({
@@ -76,19 +75,12 @@ const Carousel = ({
     const cursor = isGrabbing ? { cursor: 'grabbing' }:{};
     const snapping = isGrabbing? cssVar({ 'scroll-snap': 'none', 'scroll-behaviour': 'none' }):{};
     const res = { ...cursor, ...snapping };
-    setContainerStyle(res );
+    setContainerStyle(res);
   }, [isGrabbing]);
-
-
-  const carouselWidth = useMemo(() => {
-    if (!carouselRef.current) return { slideWith: 0 };
-    return { slideWith: pixel(carouselRef.current.clientWidth / slidesPerPage) };
-  }, [slidesPerPage]);
-
 
   return (
     <div className='carousel-wrapper' style={cssVar(
-        { distance: pixel(distance), slideWidth: pixel(distance), ...carouselWidth },
+        { distance: pixel(distance), slideWidth: pixel(distance) },
     ) as React.CSSProperties}>
 
       <button className={classNames('arrow left', classNameLeftArrow)} onClick={movePrevious} tabIndex={1}>
