@@ -3,6 +3,7 @@ module.exports = {
     'es2021': true,
   },
   'extends': [
+    'prettier',
     'google',
     'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended',
