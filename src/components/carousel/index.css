@@ -6,7 +6,7 @@
     justify-content: space-between;
     gap: var(--distance, 100px);
     overflow-x: scroll;
-    scroll-snap-type: var(--scroll-snap, both mandatory);
+    scroll-snap-type: both mandatory;
     scroll-behavior: var(--scroll-behaviour, smooth);
 }
 

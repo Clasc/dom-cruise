@@ -51,7 +51,7 @@ const useDragToScroll = ({ onMouseMove, onGrabChange, currentScroll }: {
         const res = { ...cursor, ...snapping };
         onGrabChange(res);
     }, [isGrabbing]);
-    return { mouseDownHandler, mouseMoveHandler, mouseUpHandler }
+    return { mouseDownHandler, mouseMoveHandler }
 }
 
 export default useDragToScroll;

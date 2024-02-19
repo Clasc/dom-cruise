@@ -38,7 +38,7 @@ const Carousel = ({
 
   const [containerStyle, setContainerStyle] = useState({});
 
-  const { mouseDownHandler, mouseMoveHandler, mouseUpHandler } = useDragToScroll({
+  const { mouseDownHandler, mouseMoveHandler } = useDragToScroll({
     onMouseMove: scrollBy,
     onGrabChange: setContainerStyle,
     currentScroll
@@ -61,7 +61,6 @@ const Carousel = ({
         className={classNames('carousel', (noScrollBar ? 'hide-scrollbar' : ''))}
         ref={carouselRef}
         onMouseDown={mouseDownHandler}
-        onMouseUp={mouseUpHandler}
         onMouseMove={mouseMoveHandler}
         onScroll={(e) => setScrollPos(e.currentTarget.scrollLeft)}
         style={containerStyle}>
