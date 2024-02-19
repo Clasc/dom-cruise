@@ -1,11 +1,10 @@
-import React, { useMemo, useState } from 'react';
+/* eslint-disable new-cap */
+import React, { useEffect, useMemo, useRef } from 'react';
 import './index.css';
 import { pixel } from '../../utils/styler/pixel';
 import { cssVar } from '../../utils/styler/cssVar';
 import { classNames } from '../../utils/styler/classNames';
-import { useCarousel } from '../../hooks/useCarousel';
-import useDragToScroll from '../../hooks/useDragToScroll';
-
+import { DomCruise } from '../../modules/DomCruise';
 
 const defaultLables = { left: 'Left', right: 'Right' };
 
@@ -29,21 +28,14 @@ const Carousel = ({
   noScrollBar = false,
   slides
 }: CarouselProps) => {
-  const {
-    currentScroll,
-    scrollBy,
-    carouselRef, moveNext,
-    movePrevious, setScrollPos } = useCarousel();
-
-
-  const [containerStyle, setContainerStyle] = useState({});
-
-  const { mouseDownHandler, mouseMoveHandler } = useDragToScroll({
-    onMouseMove: scrollBy,
-    onGrabChange: setContainerStyle,
-    currentScroll
-  });
-
+  const carouselRef = useRef<HTMLUListElement>(null);
+  const prevRef = useRef<HTMLButtonElement>(null);
+  const nextRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (carouselRef.current && prevRef.current && nextRef.current) {
+      DomCruise(carouselRef.current, { prev: prevRef.current, next: nextRef.current });
+    }
+  }, []);
 
   const keys = useMemo(() => slides?.map(s => Math.random()), [slides?.length]);
 
@@ -52,22 +44,18 @@ const Carousel = ({
       { distance: pixel(distance), slideWidth: pixel(distance) },
     ) as React.CSSProperties}>
 
-      <button className={classNames('arrow left', classNameLeftArrow)} onClick={movePrevious} tabIndex={1}>
+      <button className={classNames('arrow left', classNameLeftArrow)} ref={prevRef} tabIndex={1}>
         {labels.left}
       </button>
 
       <ul
         tabIndex={3}
         className={classNames('carousel', (noScrollBar ? 'hide-scrollbar' : ''))}
-        ref={carouselRef}
-        onMouseDown={mouseDownHandler}
-        onMouseMove={mouseMoveHandler}
-        onScroll={(e) => setScrollPos(e.currentTarget.scrollLeft)}
-        style={containerStyle}>
+        ref={carouselRef}>
         {slides && keys &&
           slides?.map((s, idx) => <li key={keys[idx]}> {s} </li>)}
       </ul>
-      <button className={classNames('arrow right', classNameRightArrow)} onClick={moveNext} tabIndex={2}>
+      <button className={classNames('arrow right', classNameRightArrow)} ref={nextRef} tabIndex={2}>
         {labels.right}
       </button>
     </div>
