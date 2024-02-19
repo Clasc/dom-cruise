@@ -34,7 +34,7 @@ const Carousel = ({
   const mouseUpHandler: MouseEventHandler<HTMLUListElement> = (e) => {
     e.preventDefault();
     setIsGrabbing(false);
-    document.removeEventListener('mouseup', mouseUpHandler as any);
+    document.removeEventListener('mouseup', mouseUpHandler as unknown as NativeMouseEventListener);
   };
 
   const mousePos = (e: { clientX: number, clientY: number }) => ({
