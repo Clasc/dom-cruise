@@ -1,13 +1,14 @@
-import React, { MouseEventHandler, useEffect, useState } from 'react';
+import React, { MouseEventHandler, useEffect, useMemo, useState } from 'react';
 import './index.css';
 import { pixel } from '../../utils/styler/pixel';
 import { cssVar } from '../../utils/styler/cssVar';
 import { classNames } from '../../utils/styler/classNames';
 import { useCarousel } from '../../hooks/useCarousel';
 
+type NativeMouseEventListener = (this: Document, ev: MouseEvent) => unknown;
 
 type CarouselProps = {
-  children: React.ReactNode[],
+  children: undefined | null,
   labels?: { left: string, right: string },
   distance?: number,
   noScrollBar?: boolean,
@@ -15,15 +16,16 @@ type CarouselProps = {
   scrollDistance?: number,
   classNameLeftArrow?: string,
   classNameRightArrow?: string
+  slides?: React.ReactNode[]
 };
 
 const Carousel = ({
-  children,
   labels = defaultLables,
   classNameLeftArrow = '',
   classNameRightArrow = '',
   distance = 20,
   noScrollBar = false,
+  slides
 }: CarouselProps) => {
   const [pos, setPos] = useState<{ x: number, y: number, left: number, top: number }>({ x: 0, y: 0, left: 0, top: 0 });
 
@@ -53,7 +55,7 @@ const Carousel = ({
       ...mousePos(e),
     });
     setIsGrabbing(true);
-    document.addEventListener('mouseup', mouseUpHandler as any);
+    document.addEventListener('mouseup', mouseUpHandler as unknown as NativeMouseEventListener);
   };
 
 
@@ -77,7 +79,7 @@ const Carousel = ({
     const res = { ...cursor, ...snapping };
     setContainerStyle(res);
   }, [isGrabbing]);
-
+  const keys = useMemo(() => slides?.map(s => Math.random()), [slides?.length]);
   return (
     <div className='carousel-wrapper' style={cssVar(
       { distance: pixel(distance), slideWidth: pixel(distance) },
@@ -96,7 +98,8 @@ const Carousel = ({
         onMouseMove={mouseMoveHandler}
         onScroll={(e) => setScrollPos(e.currentTarget.scrollLeft)}
         style={containerStyle}>
-        {children}
+        {slides && keys &&
+          slides?.map((s, idx) => <li key={keys[idx]}> {s} </li>)}
       </ul>
       <button className={classNames('arrow right', classNameRightArrow)} onClick={moveNext} tabIndex={2}>
         {labels.right}
