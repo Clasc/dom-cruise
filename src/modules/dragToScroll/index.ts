@@ -1,16 +1,17 @@
-import { cssVar } from "../../utils/styler/cssVar";
-import toCss from "../../utils/styler/toCss";
 import state from "../state";
+
 const dragToScroll = ({ el }: {
     el: HTMLElement,
 }) => {
     const [startX, setStartX] = state(0);
     const [scrollLeft, setScrollLeft] = state(0);
 
+    el.style.scrollSnapType = "mandatory";
+    el.style.scrollBehavior = "smooth";
+
     const [isGrabbing, setIsGrabbing] = state(false, [(grabs) => {
-        const cursor = grabs ? { cursor: 'grabbing' } : {};
-        const snapping = grabs ? cssVar({ 'scroll-behaviour': 'none' }) : {};
-        el.setAttribute('style', toCss({ ...cursor, ...snapping }));
+        el.style.cursor = grabs ? 'grabbing' : "pointer";
+        el.style.scrollBehavior = grabs ? 'unset' : "smooth";
     }]);
 
     el.addEventListener("mouseup", () => setIsGrabbing(false));
