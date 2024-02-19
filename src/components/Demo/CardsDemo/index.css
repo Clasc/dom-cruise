@@ -1,12 +1,24 @@
 .card {
-    min-width: 200px;
-    height: 400px;
+    border-radius: 30px;
+    min-width: 300px;
     background-color: white;
-    box-shadow: 20px 20px 20px grey;
+    box-shadow: 7px 2px 20px black;
+    transition: max-height 0.3s;
 }
 
-.arrow {
+.cards-arrow {
     background-color: grey;
     color: beige;
+    border: none;
     font-size: 20px;
+}
+
+.cards-demo {
+    display: flex;
+    margin: 40px 0px;
+    align-items: center;
+}
+
+.card-content {
+    color: black;
 }

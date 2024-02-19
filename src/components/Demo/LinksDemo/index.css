@@ -13,11 +13,11 @@ ul {
     background-color: white;
     color: black;
     border: none;
-    font: inherit;
+    font-size: 20px;
     cursor: pointer;
     outline: inherit;
-    border-radius: 100px;
-    box-shadow: 4px 4px 15px darkgrey;
+    border-radius: 20px;
+    box-shadow: 4px 4px 15px rgb(0, 0, 0);
     padding: 8px;
 }
 
@@ -25,12 +25,9 @@ ul {
     content: "";
 }
 
-.arrow.right {}
 
 .carousel-wrapper {
     display: flex;
     justify-content: space-between;
     gap: 24px;
 }
-
-.carousel-wrapper .arrow {}

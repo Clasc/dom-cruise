@@ -1,7 +1,18 @@
 /* eslint-disable new-cap */
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './index.css';
 import { DomCruise } from '../../../modules/DomCruise';
+
+const text = "rem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quisque egestas diam in arcu cursus euismod quis viverra nibh. Elit scelerisque mauris pellentesque pulvinar pellentesque habitant morbi. Nec ultrices dui sapien eget mi proin sed. Auctor urna nunc id cursus metus. Est lorem ipsum dolor sit amet. Hac habitasse platea dictumst quisque sagittis purus sit amet volutpat. Adipiscing enim eu turpis egestas pretium aenean pharetra magna. Id ornare arcu odio ut sem. Massa";
+
+const Card = ({ seed }: { seed: number }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    return (
+        <div className='card' onClick={() => setIsOpen(!isOpen)} style={{ maxHeight: isOpen ? "800px" : "200px" }}>
+            <img src={`https://picsum.photos/seed/${seed}/200`} />
+            {isOpen && <div className='card-content'>{text}</div>}
+        </div>);
+};
 
 const CardsDemo = () => {
     const carouselRef = useRef<HTMLDivElement>(null);
@@ -16,19 +27,16 @@ const CardsDemo = () => {
 
     const els = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     return (
-        <div className='carousel-wrapper'>
-
-            <button className='arrow left' ref={prevRef} tabIndex={1}>
+        <div className='cards-demo'>
+            <button className='cards-arrow' ref={prevRef} tabIndex={1}>
                 Left
             </button >
 
             <div ref={carouselRef}>
-                {els.map((e) => <a href="www.google.com" key={e}>
-                    <img src={`https://picsum.photos/seed/${e}/200`} />
-                </a>)}
+                {els.map((e) => <Card seed={e} key={e} />)}
             </div>
 
-            <button className='arrow right' ref={nextRef} tabIndex={2}>
+            <button className='cards-arrow' ref={nextRef} tabIndex={2}>
                 Right
             </button>
         </div >
