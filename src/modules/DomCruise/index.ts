@@ -3,23 +3,10 @@
 import dragToScroll from "../dragToScroll";
 import state from "../state";
 
-function toCss(style: Record<string, unknown>) {
-  return Object.keys(style).map(key => `${key}:${style[key]}`).join(";\n")
-}
 
 export const DomCruise = (carousel: HTMLUListElement, { prev, next }: { prev: HTMLElement, next: HTMLElement }) => {
   const slides = carousel.children;
   const [scrollPos, setScrollPos] = state(0);
-
-  const currentScroll = () => ({
-    left: carousel.scrollLeft ?? 0,
-    top: carousel.scrollTop ?? 0,
-  });
-
-  const scrollBy = ({ x, y }: { x: number, y: number }, pos: { top: number, left: number }) => {
-    carousel.scrollTop = pos.top - y;
-    carousel.scrollLeft = pos.left - x;
-  };
 
   const wholeWidth = carousel.scrollWidth ?? 0;
   const currentSlideWith = () => {
@@ -39,13 +26,8 @@ export const DomCruise = (carousel: HTMLUListElement, { prev, next }: { prev: HT
     setScrollPos((e.currentTarget as any)?.scrollLeft ?? 0)
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [style, setStyle] = state({}, [(s) => carousel.setAttribute('style', toCss(s))]);
 
   dragToScroll({
     el: carousel,
-    onMouseMove: scrollBy,
-    onGrabChange: setStyle,
-    currentScroll
   });
 };

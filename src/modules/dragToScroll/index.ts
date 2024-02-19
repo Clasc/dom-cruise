@@ -1,53 +1,33 @@
 import { cssVar } from "../../utils/styler/cssVar";
+import toCss from "../../utils/styler/toCss";
 import state from "../state";
-
-const dragToScroll = ({ el, onMouseMove, onGrabChange, currentScroll }: {
+const dragToScroll = ({ el }: {
     el: HTMLElement,
-    onMouseMove: (distance: { x: number, y: number }, pos: { top: number, left: number, x: number, y: number }) => void,
-    onGrabChange: (style: Record<string, unknown>) => void,
-    currentScroll: () => { left: number, top: number }
 }) => {
+    const [startX, setStartX] = state(0);
+    const [scrollLeft, setScrollLeft] = state(0);
 
-    const [pos, setPos] = state<{ x: number, y: number, left: number, top: number }>({ x: 0, y: 0, left: 0, top: 0 });
-
-    const [isGrabbing, setIsGrabbing] = state(false, [(s) => {
-        const cursor = s ? { cursor: 'grabbing' } : {};
-        const snapping = s ? cssVar({ 'scroll-behaviour': 'none' }) : {};
-        const res = { ...cursor, ...snapping };
-        onGrabChange(res);
+    const [isGrabbing, setIsGrabbing] = state(false, [(grabs) => {
+        const cursor = grabs ? { cursor: 'grabbing' } : {};
+        const snapping = grabs ? cssVar({ 'scroll-behaviour': 'none' }) : {};
+        el.setAttribute('style', toCss({ ...cursor, ...snapping }));
     }]);
 
-    const mousePos = (e: { clientX: number, clientY: number }) => ({
-        x: e.clientX,
-        y: e.clientY,
-    });
+    el.addEventListener("mouseup", (e) => setIsGrabbing(false));
+    el.addEventListener("mouseleave", (e) => setIsGrabbing(false));
 
-
-    el.addEventListener('mouseup', (e) => {
-        e.preventDefault();
-        setIsGrabbing(false);
-    });
-
-    el.addEventListener('mousedown', (e) => {
-        e.preventDefault();
-        setPos({
-            ...currentScroll(),
-            ...mousePos(e),
-        });
+    el.addEventListener("mousedown", (e) => {
         setIsGrabbing(true);
+        setStartX(e.pageX - el.offsetLeft);
+        setScrollLeft(el.scrollLeft);
     });
 
-
-    el.addEventListener('mousemove', (e) => {
+    el.addEventListener("mousemove", (e) => {
+        if (!isGrabbing.ref) { return }
         e.preventDefault();
-        if (!isGrabbing) return;
-
-        const mouseMoveDistance = {
-            x: e.clientX - pos.ref.x,
-            y: e.clientY - pos.ref.y,
-        };
-
-        onMouseMove(mouseMoveDistance, pos.ref)
+        const x = e.pageX - el.offsetLeft;
+        const walkX = (x - startX.ref);
+        el.scrollLeft = scrollLeft.ref - walkX;
     });
 }
 
