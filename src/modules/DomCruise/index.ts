@@ -2,7 +2,7 @@ import dragToScroll from "../dragToScroll";
 import state from "../state";
 
 
-export const DomCruise = (carousel: HTMLUListElement, options: { prev: HTMLElement, next: HTMLElement }) => {
+export const DomCruise = (carousel: HTMLElement, options: { prev: HTMLElement, next: HTMLElement }) => {
   const { prev, next } = options;
 
   const slides = carousel.children;
