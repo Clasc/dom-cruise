@@ -8,13 +8,15 @@ export const DomCruise = (carousel: HTMLUListElement, options: { prev: HTMLEleme
   const slides = carousel.children;
   const [currentScroll, setCurrentScroll] = state(0);
 
-  const currentSlideWidth = () => {
+  const scrollDistance = (nextSlide: "forwards" | "backwards") => {
     const carouselRect = carousel.getBoundingClientRect();
+    const nextIndex = nextSlide === "forwards" ? 1 : -1;
     const slideOffsets = Array.from(slides).map(s => {
       return Math.abs((carouselRect.x - s.getBoundingClientRect().x) + currentScroll.ref);
     });
     const index = slideOffsets.indexOf(Math.min(...slideOffsets));
-    return slides.item(index)?.clientWidth ?? 0;
+    const currentSlideWidth = (slides.item(index)?.clientWidth ?? 0);
+    return currentSlideWidth + (slides.item(index + nextIndex)?.clientWidth ?? 0);
   };
 
   carousel.addEventListener('scrollend', (e) => {
@@ -22,11 +24,11 @@ export const DomCruise = (carousel: HTMLUListElement, options: { prev: HTMLEleme
   });
 
   next.addEventListener('click', () => {
-    carousel.scrollLeft += currentSlideWidth();
+    carousel.scrollLeft += scrollDistance("forwards");
   });
 
   prev.addEventListener('click', () => {
-    carousel.scrollLeft -= currentSlideWidth();
+    carousel.scrollLeft -= scrollDistance("backwards");
   });
 
   dragToScroll({
