@@ -13,9 +13,8 @@ const dragToScroll = ({ el }: {
         el.setAttribute('style', toCss({ ...cursor, ...snapping }));
     }]);
 
-    el.addEventListener("mouseup", (e) => setIsGrabbing(false));
-    el.addEventListener("mouseleave", (e) => setIsGrabbing(false));
-
+    el.addEventListener("mouseup", () => setIsGrabbing(false));
+    el.addEventListener("mouseleave", () => setIsGrabbing(false));
     el.addEventListener("mousedown", (e) => {
         setIsGrabbing(true);
         setStartX(e.pageX - el.offsetLeft);
