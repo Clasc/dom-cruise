@@ -1,0 +1,12 @@
+.card {
+    min-width: 200px;
+    height: 400px;
+    background-color: white;
+    box-shadow: 20px 20px 20px grey;
+}
+
+.arrow {
+    background-color: grey;
+    color: beige;
+    font-size: 20px;
+}
