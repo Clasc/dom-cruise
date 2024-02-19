@@ -8,7 +8,6 @@ import { useCarousel } from '../../hooks/useCarousel';
 type NativeMouseEventListener = (this: Document, ev: MouseEvent) => unknown;
 
 type CarouselProps = {
-  children: undefined | null,
   labels?: { left: string, right: string },
   distance?: number,
   noScrollBar?: boolean,
