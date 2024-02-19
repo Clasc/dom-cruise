@@ -7,6 +7,8 @@ import { useCarousel } from '../../hooks/useCarousel';
 
 type NativeMouseEventListener = (this: Document, ev: MouseEvent) => unknown;
 
+const defaultLables = { left: 'Left', right: 'Right' };
+
 type CarouselProps = {
   labels?: { left: string, right: string },
   distance?: number,
@@ -18,34 +20,25 @@ type CarouselProps = {
   slides?: React.ReactNode[]
 };
 
-const Carousel = ({
-  labels = defaultLables,
-  classNameLeftArrow = '',
-  classNameRightArrow = '',
-  distance = 20,
-  noScrollBar = false,
-  slides
-}: CarouselProps) => {
+const useDragToScroll = ({ onMouseMove, onGrabChange, currentScroll }: {
+  onMouseMove: (distance: { x: number, y: number }, pos: { top: number, left: number, x: number, y: number }) => void,
+  onGrabChange: (style: Record<string, unknown>) => void,
+  currentScroll: () => { left: number, top: number }
+}) => {
   const [pos, setPos] = useState<{ x: number, y: number, left: number, top: number }>({ x: 0, y: 0, left: 0, top: 0 });
-
   const [isGrabbing, setIsGrabbing] = useState(false);
-
-  const mouseUpHandler: MouseEventHandler<HTMLUListElement> = (e) => {
-    e.preventDefault();
-    setIsGrabbing(false);
-    document.removeEventListener('mouseup', mouseUpHandler as unknown as NativeMouseEventListener);
-  };
 
   const mousePos = (e: { clientX: number, clientY: number }) => ({
     x: e.clientX,
     y: e.clientY,
   });
 
-  const {
-    currentScroll,
-    scrollBy,
-    carouselRef, moveNext,
-    movePrevious, setScrollPos } = useCarousel();
+
+  const mouseUpHandler: MouseEventHandler<HTMLUListElement> = (e) => {
+    e.preventDefault();
+    setIsGrabbing(false);
+    document.removeEventListener('mouseup', mouseUpHandler as unknown as NativeMouseEventListener);
+  };
 
   const mouseDownHandler: MouseEventHandler<HTMLUListElement> = (e) => {
     e.preventDefault();
@@ -67,17 +60,42 @@ const Carousel = ({
       y: e.clientY - pos.y,
     };
 
-    scrollBy(mouseMoveDistance, pos);
+    onMouseMove(mouseMoveDistance, pos)
   };
 
-
-  const [containerStyle, setContainerStyle] = useState({});
   useEffect(() => {
     const cursor = isGrabbing ? { cursor: 'grabbing' } : {};
     const snapping = isGrabbing ? cssVar({ 'scroll-behaviour': 'none' }) : {};
     const res = { ...cursor, ...snapping };
-    setContainerStyle(res);
+    onGrabChange(res);
   }, [isGrabbing]);
+  return { mouseDownHandler, mouseMoveHandler, mouseUpHandler }
+}
+
+const Carousel = ({
+  labels = defaultLables,
+  classNameLeftArrow = '',
+  classNameRightArrow = '',
+  distance = 20,
+  noScrollBar = false,
+  slides
+}: CarouselProps) => {
+  const {
+    currentScroll,
+    scrollBy,
+    carouselRef, moveNext,
+    movePrevious, setScrollPos } = useCarousel();
+
+
+  const [containerStyle, setContainerStyle] = useState({});
+
+  const { mouseDownHandler, mouseMoveHandler, mouseUpHandler } = useDragToScroll({
+    onMouseMove: scrollBy,
+    onGrabChange: setContainerStyle,
+    currentScroll
+  });
+
+
   const keys = useMemo(() => slides?.map(s => Math.random()), [slides?.length]);
   return (
     <div className='carousel-wrapper' style={cssVar(
@@ -108,6 +126,5 @@ const Carousel = ({
 };
 
 
-const defaultLables = { left: 'Left', right: 'Right' };
 
 export default Carousel;
