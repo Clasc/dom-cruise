@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './index.css';
 import { DomCruise, DomCruiseContext } from '../../../modules/DomCruise';
+import '../../../modules/DomCruise/styles/index.css';
 
 const LinksDemo = () => {
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -19,7 +20,7 @@ const LinksDemo = () => {
       <button className='arrow left' tabIndex={1} type="button" onClick={carouselContext?.previous}>
         Left
       </button >
-      <div ref={carouselRef}>
+      <div ref={carouselRef} className='dom-cruise'>
         <div style={{ minWidth: 400, display: 'block', height: 300, background: 'orange' }} key="test">
           Test element
         </div>

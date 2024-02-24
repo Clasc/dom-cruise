@@ -1,0 +1,6 @@
+.dom-cruise {
+    cursor: grab;
+    display: flex;
+    flex-direction: row;
+    overflow-x: scroll;
+}

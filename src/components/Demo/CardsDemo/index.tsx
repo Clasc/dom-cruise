@@ -2,6 +2,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './index.css';
 import { DomCruise, DomCruiseContext } from '../../../modules/DomCruise';
+import '../../../modules/DomCruise/styles/index.css';
+
 const text = "rem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quisque egestas diam in arcu cursus euismod quis viverra nibh. Elit scelerisque mauris pellentesque pulvinar pellentesque habitant morbi. Nec ultrices dui sapien eget mi proin sed. Auctor urna nunc id cursus metus. Est lorem ipsum dolor sit amet. Hac habitasse platea dictumst quisque sagittis purus sit amet volutpat. Adipiscing enim eu turpis egestas pretium aenean pharetra magna. Id ornare arcu odio ut sem. Massa";
 
 const Card = ({ seed }: { seed: number }) => {
@@ -30,7 +32,7 @@ const CardsDemo = () => {
                 Left
             </button >
 
-            <div ref={carouselRef}>
+            <div ref={carouselRef} className='dom-cruise'>
                 {els.map((e) => <Card seed={e} key={e} />)}
             </div>
 
