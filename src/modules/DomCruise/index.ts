@@ -14,13 +14,15 @@ export const DomCruise = (carousel: HTMLElement): DomCruiseContext => {
     const slideOffsets = Array.from(slides).map(s => {
       return Math.abs((carouselRect.x - s.getBoundingClientRect().x) + currentScroll.ref);
     });
+
     const index = slideOffsets.indexOf(Math.min(...slideOffsets));
     const currentSlideWidth = (slides.item(index)?.clientWidth ?? 0);
     return currentSlideWidth + (slides.item(index + nextIndex)?.clientWidth ?? 0);
   };
 
   carousel.addEventListener('scrollend', (e) => {
-    setCurrentScroll((e.currentTarget as any)?.scrollLeft ?? 0);
+    const scrollPos = (e.currentTarget as Element)?.scrollLeft ?? 0;
+    setCurrentScroll(scrollPos);
   });
 
   const next = () => {
