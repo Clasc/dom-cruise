@@ -3,10 +3,14 @@ import state from "../state";
 
 
 export type DomCruiseContext = { next: () => void, previous: () => void };
+export type DomCruiseOptions = { gap: number };
 
-export const DomCruise = (carousel: HTMLElement): DomCruiseContext => {
+export const DomCruise = (carousel: HTMLElement, options: DomCruiseOptions = { gap: 20 }): DomCruiseContext => {
   const slides = carousel.children;
   const [currentScroll, setCurrentScroll] = state(0);
+
+  const { gap } = options;
+  carousel.style.setProperty("--gap", `${gap}px`);
 
   const scrollDistance = (nextSlide: "forwards" | "backwards") => {
     const carouselRect = carousel.getBoundingClientRect();
