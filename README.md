@@ -1,13 +1,13 @@
-# Mini React carousel
-This is a carousel based on react only.
-No other dependendy.
+# Mini Carousel
+This is a carousel with only native js.
+No peer dependency.
+React is used for the demo, to show how it can be integrated.
 
 ## Planned features
 - different carousel element width
 - drag to scroll on desktop & mobile
 - link support for carousel elements
 - onScroll event for getting a specific element (the one scrolled to e.g.)
-- show 1 - n elements at the same time
 
 ## Available Scripts
 
