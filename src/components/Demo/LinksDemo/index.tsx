@@ -9,7 +9,7 @@ const LinksDemo = () => {
 
   useEffect(() => {
     if (carouselRef.current) {
-      DomCruise(carouselRef.current, setCarouselContext, { gap: "100px" });
+      setCarouselContext(DomCruise(carouselRef.current, { gap: "100px" }));
     }
   }, []);
 

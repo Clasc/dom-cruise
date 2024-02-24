@@ -21,10 +21,9 @@ const setStyles = (el: HTMLElement, gap: string, showScrollBar = false) => {
 }
 
 export type DomCruiseContext = { next: () => void, previous: () => void };
-export type DomCruiseMount = (context: DomCruiseContext) => void;
 export type DomCruiseOptions = { gap: string };
 
-export const DomCruise = (carousel: HTMLElement, onMounted: DomCruiseMount, options: DomCruiseOptions = { gap: "0" }): void => {
+export const DomCruise = (carousel: HTMLElement, options: DomCruiseOptions = { gap: "0" }): DomCruiseContext => {
   const { gap } = options;
   const slides = carousel.children;
   const [currentScroll, setCurrentScroll] = state(0);
@@ -59,5 +58,5 @@ export const DomCruise = (carousel: HTMLElement, onMounted: DomCruiseMount, opti
     el: carousel,
   });
 
-  onMounted({ next, previous })
+  return { next, previous };
 };
