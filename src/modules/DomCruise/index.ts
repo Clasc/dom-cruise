@@ -1,34 +1,13 @@
 import dragToScroll from "../dragToScroll";
 import state from "../state";
 
-const styles: Partial<CSSStyleDeclaration> = {
-  cursor: "grab",
-  display: "flex",
-  flexDirection: "row",
-  overflowX: "scroll"
-};
-
-const setStyles = (el: HTMLElement, gap: string, showScrollBar = false) => {
-  el.style.gap = gap;
-  (el.style as any)["scrollbar-width"] = showScrollBar ? "unset" : "none";
-
-  // eslint-disable-next-line guard-for-in
-  for (const key in styles) {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const val = styles[key]!;
-    el.style[key] = val;
-  }
-}
 
 export type DomCruiseContext = { next: () => void, previous: () => void };
-export type DomCruiseOptions = { gap: string };
 
-export const DomCruise = (carousel: HTMLElement, options: DomCruiseOptions = { gap: "0" }): DomCruiseContext => {
-  const { gap } = options;
+export const DomCruise = (carousel: HTMLElement): DomCruiseContext => {
   const slides = carousel.children;
   const [currentScroll, setCurrentScroll] = state(0);
 
-  setStyles(carousel, gap);
   const scrollDistance = (nextSlide: "forwards" | "backwards") => {
     const carouselRect = carousel.getBoundingClientRect();
     const nextIndex = nextSlide === "forwards" ? 1 : -1;

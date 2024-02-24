@@ -9,7 +9,7 @@ const LinksDemo = () => {
 
   useEffect(() => {
     if (carouselRef.current) {
-      setCarouselContext(DomCruise(carouselRef.current, { gap: "100px" }));
+      setCarouselContext(DomCruise(carouselRef.current));
     }
   }, []);
 
@@ -19,7 +19,7 @@ const LinksDemo = () => {
       <button className='arrow left' tabIndex={1} type="button" onClick={carouselContext?.previous}>
         Left
       </button >
-      <div ref={carouselRef} className='carousel'>
+      <div ref={carouselRef}>
         <div style={{ minWidth: 400, display: 'block', height: 300, background: 'orange' }} key="test">
           Test element
         </div>
