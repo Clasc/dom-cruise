@@ -1,25 +1,22 @@
 /* eslint-disable new-cap */
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './index.css';
-import { DomCruise } from '../../../modules/DomCruise';
-
-
+import { DomCruise, DomCruiseContext } from '../../../modules/DomCruise';
 
 const LinksDemo = () => {
   const carouselRef = useRef<HTMLDivElement>(null);
-  const prevRef = useRef<HTMLButtonElement>(null);
-  const nextRef = useRef<HTMLButtonElement>(null);
+  const [carouselContext, setCarouselContext] = useState<DomCruiseContext | null>(null);
 
   useEffect(() => {
-    if (carouselRef.current && prevRef.current && nextRef.current) {
-      DomCruise(carouselRef.current, { prev: prevRef.current, next: nextRef.current, gap: "100px" });
+    if (carouselRef.current) {
+      DomCruise(carouselRef.current, setCarouselContext, { gap: "100px" });
     }
   }, []);
 
   const els = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   return (
     <div className='carousel-wrapper'>
-      <button className='arrow left' ref={prevRef} tabIndex={1}>
+      <button className='arrow left' tabIndex={1} type="button" onClick={carouselContext?.previous}>
         Left
       </button >
       <div ref={carouselRef} className='carousel'>
@@ -30,7 +27,7 @@ const LinksDemo = () => {
           <img src={`https://picsum.photos/seed/${e}/200`} />
         </a>)}
       </div>
-      <button className='arrow right' ref={nextRef} tabIndex={2}>
+      <button className='arrow right' type="button" onClick={carouselContext?.next} tabIndex={2}>
         Right
       </button>
     </div >

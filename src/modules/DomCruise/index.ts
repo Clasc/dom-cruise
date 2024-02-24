@@ -14,14 +14,18 @@ const setStyles = (el: HTMLElement, gap: string, showScrollBar = false) => {
 
   // eslint-disable-next-line guard-for-in
   for (const key in styles) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const val = styles[key]!;
     el.style[key] = val;
   }
 }
 
-export const DomCruise = (carousel: HTMLElement, options: { prev: HTMLElement, next: HTMLElement, gap: string }) => {
-  const { prev, next, gap } = options;
+export type DomCruiseContext = { next: () => void, previous: () => void };
+export type DomCruiseMount = (context: DomCruiseContext) => void;
+export type DomCruiseOptions = { gap: string };
 
+export const DomCruise = (carousel: HTMLElement, onMounted: DomCruiseMount, options: DomCruiseOptions = { gap: "0" }): void => {
+  const { gap } = options;
   const slides = carousel.children;
   const [currentScroll, setCurrentScroll] = state(0);
 
@@ -41,15 +45,19 @@ export const DomCruise = (carousel: HTMLElement, options: { prev: HTMLElement, n
     setCurrentScroll((e.currentTarget as any)?.scrollLeft ?? 0);
   });
 
-  next.addEventListener('click', () => {
+  const next = () => {
+    console.log("next called");
     carousel.scrollLeft += scrollDistance("forwards");
-  });
+  };
 
-  prev.addEventListener('click', () => {
+  const previous = () => {
+    console.log("previous called");
     carousel.scrollLeft -= scrollDistance("backwards");
-  });
+  };
 
   dragToScroll({
     el: carousel,
   });
+
+  onMounted({ next, previous })
 };

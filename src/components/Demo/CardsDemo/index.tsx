@@ -1,7 +1,7 @@
 /* eslint-disable new-cap */
 import React, { useEffect, useRef, useState } from 'react';
 import './index.css';
-import { DomCruise } from '../../../modules/DomCruise';
+import { DomCruise, DomCruiseContext } from '../../../modules/DomCruise';
 
 const text = "rem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quisque egestas diam in arcu cursus euismod quis viverra nibh. Elit scelerisque mauris pellentesque pulvinar pellentesque habitant morbi. Nec ultrices dui sapien eget mi proin sed. Auctor urna nunc id cursus metus. Est lorem ipsum dolor sit amet. Hac habitasse platea dictumst quisque sagittis purus sit amet volutpat. Adipiscing enim eu turpis egestas pretium aenean pharetra magna. Id ornare arcu odio ut sem. Massa";
 
@@ -16,19 +16,18 @@ const Card = ({ seed }: { seed: number }) => {
 
 const CardsDemo = () => {
     const carouselRef = useRef<HTMLDivElement>(null);
-    const prevRef = useRef<HTMLButtonElement>(null);
-    const nextRef = useRef<HTMLButtonElement>(null);
+    const [carouselContext, setCarouselContext] = useState<DomCruiseContext | null>(null);
 
     useEffect(() => {
-        if (carouselRef.current && prevRef.current && nextRef.current) {
-            DomCruise(carouselRef.current, { prev: prevRef.current, next: nextRef.current, gap: "100px" });
+        if (carouselRef.current) {
+            DomCruise(carouselRef.current, setCarouselContext, { gap: "100px" });
         }
     }, []);
 
     const els = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     return (
         <div className='cards-demo'>
-            <button className='cards-arrow' ref={prevRef} tabIndex={1}>
+            <button className='cards-arrow' type="button" onClick={carouselContext?.previous} tabIndex={1}>
                 Left
             </button >
 
@@ -36,7 +35,7 @@ const CardsDemo = () => {
                 {els.map((e) => <Card seed={e} key={e} />)}
             </div>
 
-            <button className='cards-arrow' ref={nextRef} tabIndex={2}>
+            <button className='cards-arrow' type="button" onClick={carouselContext?.next} tabIndex={2}>
                 Right
             </button>
         </div >
