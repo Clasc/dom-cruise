@@ -1,13 +1,10 @@
 import { StateMachine } from "../StateMachine";
 
-
 const dragToScroll = ({ el }: {
     el: HTMLElement,
 }) => {
     el.style.scrollSnapType = "mandatory";
     el.style.scrollBehavior = "smooth";
-
-
 
     const scrollLeft = new StateMachine(0);
     const startX = new StateMachine(0);
@@ -28,15 +25,8 @@ const dragToScroll = ({ el }: {
     const isGrabbing = new StateMachine(false);
     const velocity = new StateMachine(0);
     isGrabbing.onChange((grabbing) => {
-        if (grabbing) {
-            el.style.cursor = 'grabbing';
-            el.style.scrollBehavior = 'unset';
-            return;
-        }
-
-        el.style.cursor = "pointer";
-        el.style.scrollBehavior = "smooth";
-
+        el.style.cursor = grabbing ? 'grabbing' : "pointer";
+        el.style.scrollBehavior = grabbing ? 'unset' : "smooth";
     });
 
     const endDrag = () => {
@@ -50,8 +40,6 @@ const dragToScroll = ({ el }: {
 
     el.addEventListener("mouseup", endDrag);
     el.addEventListener("mouseleave", endDrag);
-
-
 }
 
 export default dragToScroll;

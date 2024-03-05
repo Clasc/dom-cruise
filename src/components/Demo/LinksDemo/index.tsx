@@ -10,7 +10,7 @@ const LinksDemo = () => {
 
   useEffect(() => {
     if (carouselRef.current) {
-      setCarouselContext(DomCruise(carouselRef.current, { scrollFactor: 0.5 }));
+      setCarouselContext(DomCruise(carouselRef.current, { scrollFactor: 0.5, onScroll: console.log }));
     }
   }, []);
 
