@@ -1,36 +1,57 @@
 import { StateMachine } from "../StateMachine";
 
+
 const dragToScroll = ({ el }: {
     el: HTMLElement,
 }) => {
-    const startX = new StateMachine(0);
-    const scrollLeft = new StateMachine(0);
-
     el.style.scrollSnapType = "mandatory";
     el.style.scrollBehavior = "smooth";
 
-    const isGrabbing = new StateMachine(false);
 
-    isGrabbing.onChange((newVal) => {
-        el.style.cursor = newVal ? 'grabbing' : "pointer";
-        el.style.scrollBehavior = newVal ? 'unset' : "smooth";
-    });
 
-    el.addEventListener("mouseup", () => isGrabbing.mutate(false));
-    el.addEventListener("mouseleave", () => isGrabbing.mutate(false));
+    const scrollLeft = new StateMachine(0);
+    const startX = new StateMachine(0);
+    const mousePos = (e: MouseEvent) => e.pageX - el.offsetLeft;
     el.addEventListener("mousedown", (e) => {
         isGrabbing.mutate(true);
-        startX.mutate(e.pageX - el.offsetLeft);
+        startX.mutate(mousePos(e));
         scrollLeft.mutate(el.scrollLeft);
     });
 
     el.addEventListener("mousemove", (e) => {
         if (!isGrabbing.state) return
         e.preventDefault();
-        const x = e.pageX - el.offsetLeft;
-        const walkX = (x - startX.state);
-        el.scrollLeft = scrollLeft.state - walkX;
+        velocity.mutate(mousePos(e) - startX.state);
+        el.scrollLeft = scrollLeft.state - velocity.state;
     });
+
+    const isGrabbing = new StateMachine(false);
+    const velocity = new StateMachine(0);
+    isGrabbing.onChange((grabbing) => {
+        if (grabbing) {
+            el.style.cursor = 'grabbing';
+            el.style.scrollBehavior = 'unset';
+            return;
+        }
+
+        el.style.cursor = "pointer";
+        el.style.scrollBehavior = "smooth";
+
+    });
+
+    const endDrag = () => {
+        isGrabbing.mutate(false);
+        const lastVelocity = velocity.state
+        velocity.mutate(0);
+        requestAnimationFrame(() => {
+            el.scrollLeft -= lastVelocity;
+        });
+    };
+
+    el.addEventListener("mouseup", endDrag);
+    el.addEventListener("mouseleave", endDrag);
+
+
 }
 
 export default dragToScroll;
