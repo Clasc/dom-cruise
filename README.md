@@ -1,16 +1,9 @@
-# Mini Carousel
-This is a carousel with only native js.
+# Dom Cruise
+This is a carousel implementation in native js only.
 No peer dependency.
 React is used for the demo, to show how it can be integrated.
 
-## Planned features
-- different carousel element width
-- drag to scroll on desktop & mobile
-- link support for carousel elements
-- onScroll event for getting a specific element (the one scrolled to e.g.)
-
 ## Available Scripts
-
 In the project directory, you can run:
 
 ### `npm start`
